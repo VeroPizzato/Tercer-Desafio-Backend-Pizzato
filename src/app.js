@@ -3,7 +3,7 @@ const ProductManager = require('./ProductManager');
 
 const app = express();
 
-const filename = `{__dirname}/../Products.txt`
+const filename = `{__dirname}/../products.txt`
 const productsManager = new ProductManager(filename)
 
 app.get('/products', async (req, res) => {
