@@ -7,14 +7,19 @@ const filename = `{__dirname}/../products.txt`
 const productsManager = new ProductManager(filename)
 
 app.get('/products', async (req, res) => {
-    try {
-        const products = await productsManager.getProducts();
-        res.send(products);
-        return;
+    try {  
+        let cantidadLimite = +req.query.limit;
+        if (!cantidadLimite) {
+            const products = await productsManager.getProducts();
+            res.send(products);
+            return;
+        }
+        const listadoProductos = await productsManager.getProducts();
+        res.send(listadoProductos.slice(0,cantidadLimite));
     }
     catch (err) {
         res.send('Error al obtener productos!')
-    } 
+    }
 });
 
 app.get('/products/:id', async (req, res) => {
@@ -22,13 +27,13 @@ app.get('/products/:id', async (req, res) => {
         const productByID = await productsManager.getProductById(req.params.id);
         if (!productByID) {
             res.send('Error: Id inexistente!')
+            return;
         }
-        res.send(productByID);
-        return;
+        res.send(productByID);       
     }
     catch (err) {
         res.send('Error al obtener id ' + req.params.id)
-    }  
+    }
 });
 
 const main = async () => {
