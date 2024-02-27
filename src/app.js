@@ -24,10 +24,10 @@ app.get('/products', async (req, res) => {
     }
 });
 
-app.get('/products/:id', async (req, res) => {
+app.get('/products/:pid', async (req, res) => {
     try {
-        const productByID = await productsManager.getProductById(req.params.id);
-        console.log(productByID)
+        const productId = Number.parseInt(req.params.pid)  
+        const productByID = await productsManager.getProductById(productId);       
         if (!productByID) {
             res.send('Error: Id inexistente!')
             return;
