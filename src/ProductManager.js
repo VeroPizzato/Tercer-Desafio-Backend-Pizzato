@@ -12,7 +12,7 @@ class ProductManager {
 
     async #readProducts() {
         try {
-            const fileProducts = await fs.promises.readFile(this.path)
+            const fileProducts = await fs.promises.readFile(this.path, 'utf-8')
             this.#products = JSON.parse(fileProducts)
         }
         catch (err) {
