@@ -3,19 +3,21 @@ const ProductManager = require('./ProductManager');
 
 const app = express();
 
-const filename = `{__dirname}/../products.txt`
+app.use(express.urlencoded({extended: true}))
+
+const filename = `{__dirname}/../products.json`
 const productsManager = new ProductManager(filename)
 
 app.get('/products', async (req, res) => {
     try {  
-        let cantidadLimite = +req.query.limit;
-        if (!cantidadLimite) {
-            const products = await productsManager.getProducts();
-            res.send(products);
-            return;
-        }
-        const listadoProductos = await productsManager.getProducts();
-        res.send(listadoProductos.slice(0,cantidadLimite));
+        let cantLimite = req.query.limit       
+        const listadoProductos = await productsManager.getProducts()
+
+        const prodFiltrados = cantLimite
+        ? listadoProductos.slice(0,cantLimite)
+        : listadoProductos
+
+        res.send(prodFiltrados)                  
     }
     catch (err) {
         res.send('Error al obtener productos!')
@@ -25,6 +27,7 @@ app.get('/products', async (req, res) => {
 app.get('/products/:id', async (req, res) => {
     try {
         const productByID = await productsManager.getProductById(req.params.id);
+        console.log(productByID)
         if (!productByID) {
             res.send('Error: Id inexistente!')
             return;

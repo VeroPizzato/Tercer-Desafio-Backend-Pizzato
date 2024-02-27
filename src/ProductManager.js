@@ -44,7 +44,7 @@ class ProductManager {
         }
     }
 
-    getProductById = (id) => {
+    getProductById = async (id) => {
         const codeIndex = this.#products.findIndex(e => e.id === id)
         if (codeIndex === -1) {
             return (`Producto con ID: ${id} Not Found`)
