@@ -10,24 +10,24 @@ const productsManager = new ProductManager(filename)
 
 app.get('/products', async (req, res) => {
     try {  
-        let cantLimite = req.query.limit       
+        let cantLimite = req.query.limit    
         const listadoProductos = await productsManager.getProducts()
 
-        const prodFiltrados = cantLimite
-        ? listadoProductos.slice(0,cantLimite)
+        const result = cantLimite
+        ? listadoProductos.splice(0,cantLimite)
         : listadoProductos
 
-        res.send(prodFiltrados)                  
+        res.send(result)                  
     }
     catch (err) {
         res.send('Error al obtener productos!')
     }
 });
 
-app.get('/products/:id', async (req, res) => {
+app.get('/products/:pid', async (req, res) => {
     try {
-        const productByID = await productsManager.getProductById(req.params.id);
-        console.log(productByID)
+        const productId = Number.parseInt(req.params.pid)  // const productId = +req.params.id
+        const productByID = await productsManager.getProductById(productId);      
         if (!productByID) {
             res.send('Error: Id inexistente!')
             return;
